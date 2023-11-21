@@ -42,10 +42,20 @@ app.get("/register", (request, response) => {
 })
 
 app.get("/", (request, response) => {
-    response.render("home")
+    const query = 'SELECT * FROM books'
+    conn.query(sql,(error,data)=>{
+        if (error){
+            return console.log(error)
+        }
+
+        const books = data
+
+        response.render("home", {books})
+    })
 })
 
 // conexão com mySQL
+
 
 const conn = mysql.createConnection({
     host: "localhost",
@@ -65,5 +75,6 @@ conn.connect((error) => {
 
     app.listen(3000, () =>{
         console.log("Servidor rodando na porta 3000!")
+        
     })
 })
