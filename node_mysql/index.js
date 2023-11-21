@@ -52,7 +52,6 @@ app.get("/", (request, response) => {
 
         response.render("home", {books})
     })
-
 })
 
 // conexão com mySQL
