@@ -54,7 +54,7 @@ app.get("/", (request, response) => {
     })
 })
 
-// conexão com mySQL
+// conexão com mySQL teste 2
 
 
 const conn = mysql.createConnection({
