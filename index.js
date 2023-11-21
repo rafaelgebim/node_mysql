@@ -20,12 +20,30 @@ app.use(express.urlencoded({
 app.use(express.json())
 
 // rotas
+
+app.post("/edit/save",(request,response)=>{
+    const {id, title,pageqty} = request.body
+
+    const sql = `
+            UPDATE books 
+            SET title = '${title}', pageqty = '${pageqty}'
+            WHERE id = ${id} 
+     `
+     conn.query(sql, (error)=>{
+        if(error){
+            return console.log(error)
+        }
+
+        response.redirect("/")
+     })
+})
+
 app.post("/register/save", (request, response)=>{
-    const { title, pageqly } = request.body
+    const { title, pageqty } = request.body
 
     const query = `
-    INSERT INTO books (title, pageqly)
-    VALUES ('${title}', '${pageqly}')
+    INSERT INTO books (title, pageqty)
+    VALUES ('${title}', '${pageqty}')
     `
     conn.query(query, (error) =>{
         if (error){
@@ -41,7 +59,7 @@ app.post("/register/save", (request, response)=>{
 app.get("/book/:id", (request,response) =>{
     const id = request.params.id
 
-    const sql = 'SELECT * FROM books WHERE id=${id}'
+    const sql = `SELECT * FROM books WHERE id=${id}`
 
     conn.query(sql, (error, data)=>{
         if (error){
@@ -53,12 +71,30 @@ app.get("/book/:id", (request,response) =>{
     })
 } )
 
+app.get("/edit/:id", (request,response) =>{
+    const id = request.params.id
+
+    const sql = `SELECT * FROM books WHERE id = ${id}`
+
+    conn.query(sql, (error,data)=>{
+        if (error) {
+            return console.log(error)
+        }
+
+        const book = data[0]
+
+        response.render('edit', {book})
+
+    })
+
+})
+
 app.get("/register", (request, response) => {
     response.render("register")
 })
 
 app.get("/", (request, response) => {
-    const query = 'SELECT * FROM books'
+    const query = `SELECT * FROM books`
     conn.query(sql,(error,data)=>{
         if (error){
             return console.log(error)
